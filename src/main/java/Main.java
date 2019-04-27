@@ -3,6 +3,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.TimeZone;
 import static java.util.Arrays.asList;
@@ -18,7 +19,7 @@ public class Main {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         //TODO uncomment and execute
 //        step_6();
-//        step_9();
+        step_9();
     }
 
     private static void step_6() {
@@ -39,7 +40,13 @@ public class Main {
     }
 
     private static Map<String, AttributeValue> createConfig(String alertType, Map<String, String> thresholds) {
-        AttributeValue timestamp = new AttributeValue(OffsetDateTime.now().toString());
+        AttributeValue timestamp = new AttributeValue(
+            OffsetDateTime.now()
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0)
+                .toString()
+        );
         return new HashMap<String, AttributeValue>() {{
             put("namespace", new AttributeValue(NAMESPACE));
             put("timestamp", timestamp);
