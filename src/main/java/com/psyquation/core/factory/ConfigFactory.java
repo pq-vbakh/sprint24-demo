@@ -1,54 +1,36 @@
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+package com.psyquation.core.factory;
+
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.TimeZone;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toMap;
 
-public class Main {
+public class ConfigFactory {
 
-    private static final String TABLE_NAME = "pq-cthulhu-user-alert-config";
-    private static final String NAMESPACE = "axi:US06-Live:450342";
-
-    public static void main(String... args) {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-        //TODO uncomment and execute
-//        step_6();
-        step_9();
-    }
-
-    private static void step_6() {
-        final AmazonDynamoDB ddb = AmazonDynamoDBClientBuilder.defaultClient();
-        ddb.putItem(TABLE_NAME, createEquityConfig(0., 100_000.));
-    }
-
-    private static void step_9() {
-        final AmazonDynamoDB ddb = AmazonDynamoDBClientBuilder.defaultClient();
-        ddb.putItem(TABLE_NAME, createEquityConfig(2000., 3000.));
-    }
-
-    private static Map<String, AttributeValue> createEquityConfig(double min, double max) {
-        return createConfig("EQUITY", new HashMap<String, String>() {{
+    public static Map<String, AttributeValue> createEquityConfig(String namespace, double min, double max) {
+        return createConfig(namespace, "EQUITY", new HashMap<String, String>() {{
             put("equity_low", "" + min);
             put("equity_high","" + max);
         }});
     }
 
-    private static Map<String, AttributeValue> createConfig(String alertType, Map<String, String> thresholds) {
+    public static Map<String, AttributeValue> removeEquityConfig(String namespace) {
+        throw new UnsupportedOperationException();
+    }
+
+    private static Map<String, AttributeValue> createConfig(String namespace, String alertType, Map<String, String> thresholds) {
         AttributeValue timestamp = new AttributeValue(
             OffsetDateTime.now()
-                .withMinute(0)
-                .withSecond(0)
+                .withMinute(1)
+                .withSecond(1)
                 .withNano(0)
                 .toString()
         );
         return new HashMap<String, AttributeValue>() {{
-            put("namespace", new AttributeValue(NAMESPACE));
+            put("namespace", new AttributeValue(namespace));
             put("timestamp", timestamp);
             put("type", new AttributeValue(alertType));
             put("user_inputs", userInputs(timestamp, thresholds));
