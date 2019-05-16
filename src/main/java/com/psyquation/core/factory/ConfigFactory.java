@@ -22,13 +22,14 @@ public class ConfigFactory {
     }
 
     private static Map<String, AttributeValue> createConfig(String namespace, String alertType, Map<String, String> thresholds) {
-        AttributeValue timestamp = new AttributeValue(
+        AttributeValue timestamp = new AttributeValue();
+        timestamp.setN(String.valueOf(
             OffsetDateTime.now()
                 .withMinute(1)
                 .withSecond(1)
                 .withNano(0)
-                .toString()
-        );
+                .toEpochSecond()
+        ));
         return new HashMap<String, AttributeValue>() {{
             put("namespace", new AttributeValue(namespace));
             put("timestamp", timestamp);

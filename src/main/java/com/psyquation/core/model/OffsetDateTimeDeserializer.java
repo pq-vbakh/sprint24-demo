@@ -15,7 +15,8 @@ public class OffsetDateTimeDeserializer extends JsonDeserializer<OffsetDateTime>
     public OffsetDateTime deserialize(JsonParser jp, DeserializationContext cx) throws IOException {
         return OffsetDateTime.ofInstant(
             Instant.ofEpochSecond(
-                ((IntNode) jp.getCodec().readTree(jp)).asLong()), ZoneId.of("UTC"));
+                ((IntNode) jp.getCodec().readTree(jp)).asLong()),
+            ZoneId.of("UTC"));
     }
 
 }
