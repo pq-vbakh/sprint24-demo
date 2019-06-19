@@ -9,7 +9,7 @@ import java.time.OffsetDateTime;
 
 public class OffsetDateTimeSerializer extends StdSerializer<OffsetDateTime> {
 
-    public OffsetDateTimeSerializer() {
+        public OffsetDateTimeSerializer() {
         this(null);
     }
 
