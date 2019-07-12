@@ -8,9 +8,9 @@ import java.util.Map;
 public class DynamoDBPublisher {
 
     private static final AmazonDynamoDB db = AmazonDynamoDBClientBuilder.defaultClient();
-    private static final String TABLE_NAME = "pq-cthulhu-user-alert-config";
+    private static final String TABLE_NAME = "pq-cthulhu-alert-subscription";
 
-    public static void persist(Map<String, AttributeValue> config) {
-        db.putItem(TABLE_NAME, config);
+    public static void persist(Map<String, AttributeValue> subscription) {
+        db.putItem(TABLE_NAME, subscription);
     }
 }
