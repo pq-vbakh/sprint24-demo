@@ -29,7 +29,6 @@ public class Main {
 
     @SneakyThrows
     private static void writeAlertSubscriptionEvents() {
-        //TODO check namespace
         long login = 830_101;
         OffsetDateTime create = OffsetDateTime.of(2019, 4 ,2, 23, 0, 0, 0, ZoneOffset.UTC);
 
