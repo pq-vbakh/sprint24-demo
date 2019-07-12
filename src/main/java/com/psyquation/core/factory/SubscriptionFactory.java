@@ -22,7 +22,7 @@ public class SubscriptionFactory {
             if (subscription.inputs() != null)
                 put("inputs", map(subscription.inputs()));
             put("action", str(DynamoDBAction.INSERT.name()));
-            put("timestamp", str(timestamp.toEpochSecond()));
+            put("timestamp", num(timestamp.toEpochSecond()));
             put("targets", list(targetTypes));
             put("active",bool(true));
             put("table", str("pq-cthulhu-alert-subscription"));
