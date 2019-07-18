@@ -1,7 +1,6 @@
 package com.psyquation.core.factory;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.psyquation.core.model.enums.DynamoDBAction;
 import com.psyquation.core.model.enums.TargetType;
 import com.psyquation.core.model.subscriptions.AlertSubscription;
 import java.time.OffsetDateTime;
@@ -11,7 +10,7 @@ import static java.util.stream.Collectors.toList;
 
 public class SubscriptionFactory {
 
-    public static Map<String, AttributeValue> createSubscription(Long userId, Long login, String alertType, Set<TargetType> targetTypes, AlertSubscription subscription, OffsetDateTime timestamp) {
+    public static Map<String, AttributeValue> createSubscription(Long userId, Integer login, String alertType, Set<TargetType> targetTypes, AlertSubscription subscription, OffsetDateTime timestamp) {
         return new HashMap<String, AttributeValue>() {{
             put("id", str(randomUUID().toString()));
             put("type", str(alertType));
@@ -21,20 +20,14 @@ public class SubscriptionFactory {
                 put("params", map(subscription.params()));
             if (subscription.inputs() != null)
                 put("inputs", map(subscription.inputs()));
-            put("action", str(DynamoDBAction.INSERT.name()));
-            put("timestamp", num(timestamp.toEpochSecond()));
+            put("timestamp", num(timestamp.minusWeeks(2).toEpochSecond()));
             put("targets", list(targetTypes));
             put("active",bool(true));
-            put("table", str("pq-cthulhu-alert-subscription"));
         }};
     }
 
     private static AttributeValue str(String value) {
         return new AttributeValue(value);
-    }
-
-    private static AttributeValue str(Number value) {
-        return new AttributeValue("" + value);
     }
 
     private static AttributeValue num(Number value) {
