@@ -15,10 +15,11 @@ public class AlertRelatedDataFactory {
             .build();
     }
 
-    public static AlertRelatedData createTradeDurationData(String symbol, Long duration) {
+    public static AlertRelatedData createTradeDurationData(Integer login, String symbol, Long duration) {
         return AlertRelatedData.builder()
             .brokerName("AxiCorp Financial Services Pty Ltd")
             .serverName("US06-Live")
+            .login(login)
             .order(1L)
             .tradeDuration(duration)
             .tradeSymbol(symbol)

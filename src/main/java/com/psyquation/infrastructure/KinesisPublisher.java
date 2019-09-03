@@ -1,6 +1,6 @@
 package com.psyquation.infrastructure;
 
-import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.kinesis.producer.KinesisProducerConfiguration;
 import com.amazonaws.services.kinesis.producer.KinesisProducer;
 import com.amazonaws.services.kinesis.producer.UserRecordResult;
@@ -17,29 +17,34 @@ import static java.util.Arrays.asList;
 
 public class KinesisPublisher {
 
-    private static final String STREAM_NAME = "pq-cthulhu-alert-input";
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static final KinesisProducer producer = new KinesisProducer(
-        new KinesisProducerConfiguration()
-            .setRegion(US_WEST_2.getName())
-            .setKinesisEndpoint("kinesis.us-west-2.amazonaws.com")
-            .setKinesisPort(443)
-            .setVerifyCertificate(false)
-            .setCredentialsProvider(new EnvironmentVariableCredentialsProvider())
-            .setMaxConnections(1)
-            .setRequestTimeout(60_000)
-            .setRecordMaxBufferedTime(15_000));
+    private final KinesisProducer producer;
+    private final String streamName;
 
     static {
         objectMapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public static void publish(AlertRelatedData obj) throws JsonProcessingException, ExecutionException, InterruptedException {
+    public KinesisPublisher(String profile) {
+        producer = new KinesisProducer(
+            new KinesisProducerConfiguration()
+                .setRegion(US_WEST_2.getName())
+                .setKinesisEndpoint("kinesis.us-west-2.amazonaws.com")
+                .setKinesisPort(443)
+                .setVerifyCertificate(false)
+                .setCredentialsProvider(new ProfileCredentialsProvider(profile))
+                .setMaxConnections(1)
+                .setRequestTimeout(60_000)
+                .setRecordMaxBufferedTime(15_000));
+        streamName = profile.equals("prod") ? "pq-psyquation2-alert-input" : "pq-cthulhu-alert-input";;
+    }
+
+    public void publish(AlertRelatedData obj) throws JsonProcessingException, ExecutionException, InterruptedException {
         String data = objectMapper.writeValueAsString(asList(obj));
         System.out.println("Writing to Kinesis: " + data);
         ByteBuffer buffer = ByteBuffer.wrap(data.getBytes(StandardCharsets.UTF_8));
-        UserRecordResult response = producer.addUserRecord(STREAM_NAME, obj.getServerName(), buffer).get();
+        UserRecordResult response = producer.addUserRecord(streamName, obj.getServerName(), buffer).get();
         System.out.println("Success: " + response.isSuccessful());
     }
 }

@@ -5,7 +5,11 @@ import java.util.Map;
 
 public interface AlertSubscription {
 
-    Map<String, AttributeValue> params();
+    default Map<String, AttributeValue> params() {
+        return null;
+    }
 
-    Map<String, AttributeValue> inputs();
+    default Map<String, AttributeValue> inputs() {
+        return null;
+    }
 }

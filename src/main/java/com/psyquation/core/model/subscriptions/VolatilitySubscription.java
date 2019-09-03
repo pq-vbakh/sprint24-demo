@@ -18,9 +18,4 @@ public class VolatilitySubscription implements AlertSubscription {
             put("quantile_percentage", new AttributeValue("" + percentage));
         }};
     }
-
-    @Override
-    public Map<String, AttributeValue> inputs() {
-        return null;
-    }
 }

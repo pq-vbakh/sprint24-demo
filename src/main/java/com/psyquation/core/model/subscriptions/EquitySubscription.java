@@ -11,11 +11,6 @@ public class EquitySubscription implements AlertSubscription {
     private final double threshold;
 
     @Override
-    public Map<String, AttributeValue> params() {
-        return null;
-    }
-
-    @Override
     public Map<String, AttributeValue> inputs() {
         return Collections.singletonMap("threshold", new AttributeValue("" + threshold));
     }

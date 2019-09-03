@@ -22,9 +22,4 @@ public class MovingAverageCrossSubscription implements AlertSubscription {
             put("long_period", new AttributeValue("" + longPeriod));
         }};
     }
-
-    @Override
-    public Map<String, AttributeValue> inputs() {
-        return null;
-    }
 }

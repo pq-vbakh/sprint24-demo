@@ -18,7 +18,7 @@ public class DynamoDBPublisher {
             .withRegion(Regions.US_WEST_2.getName())
             .withCredentials(new ProfileCredentialsProvider(profile))
             .build();
-        table = profile == "prod" ? "pq-psyquation2-alert-subscription" : "pq-cthulhu-alert-subscription";
+        table = profile.equals("prod") ? "pq-psyquation2-alert-subscription" : "pq-cthulhu-alert-subscription";
     }
 
     public void persist(Map<String, AttributeValue> subscription) {

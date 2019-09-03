@@ -20,9 +20,4 @@ public class NDayHighLowSubscription implements AlertSubscription {
             put("N", new AttributeValue("" + N));
         }};
     }
-
-    @Override
-    public Map<String, AttributeValue> inputs() {
-        return null;
-    }
 }
